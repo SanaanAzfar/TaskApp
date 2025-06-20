@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="App.css">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+</head>
+
+<body>
+<h1>Task Details</h1>
+<div class="colm">
+<div class="Note2">
+  <h2>Title Will Go here</h2>
+  <h3>Description:</h3>
+  <p class="normaltext">pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po pop pe pop pe pop po pe po </p>
+  <div class="space"></div>
+  <h3>Status:</h3>
+  <img  src="./assets/Images/InProgress.png" class="Bar"/>
+  <h4>In Progress</h4>
+  <div class="space"></div>
+  <h3>Due Date:</h3>
+  <div class="space"></div>
+   <h4><div id="text">10:12:2025</div></h4>
+   <script>
+    function wrapLetters(element) {
+  const text = element.textContent;
+  element.innerHTML = '';
+  
+  for (let char of text) {
+    const span = document.createElement('span');
+    span.className = char === ':' ? 'letter-box space' : 'letter-box';
+    span.textContent = char === ' ' ? '\u00A0' : char; // non-breaking space
+    element.appendChild(span);
+  }
+}
+
+wrapLetters(document.getElementById('text'));
+   </script>
+  <div class="space"></div>
+  <div class="colm">
+  <button class="usualbutton">HOME</button>
+  <button class="usualbutton">EDIT</button>
+  </div>
+</div>
+</div>
+</body>
+</html>

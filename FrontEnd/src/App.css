@@ -1,0 +1,321 @@
+@font-face {
+    font-family: DrawnFont;
+    src: url("./assets/Fonts/StickyNotes.ttf") format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: Marker;
+    src: url("./assets/Fonts/PermanentMarker-Regular.ttf") format('truetype');
+    font-display: swap;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    font-family: DrawnFont;
+    background-image: url("./assets/Images/Board.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    image-rendering: crisp-edges;
+    background-position: center top;
+    background-attachment: fixed;
+}
+
+/* Style the React root container */
+#root {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style your main component container */
+#root > div {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    font-family: DrawnFont;
+}
+
+h1 {
+    font-family: Marker;
+    text-align: center;
+    font-size: 72px;
+    color: bisque;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    /* Keep TaskBoard header fixed at top */
+    position: static;
+    top: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    font-size: 64px;
+    flex-shrink: 0;
+    margin-top: 40px;
+    margin-bottom: 10px; 
+}
+
+h3 {
+    text-align: justify;
+    margin: 0 30px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-size: 48px;
+    flex-shrink: 0;
+}
+
+h4 {
+    font-family: Marker;
+    text-align: center;
+    text-decoration: underline;
+    margin: 0 30px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-size: 48px;
+    flex-shrink: 0;
+}
+
+h5 {
+    font-family: Marker;
+    text-align: center;
+    text-decoration: underline;
+    margin: 0 30px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.normaltext {
+    font-size: 32px;
+    margin: 10px 40px;
+    flex-shrink: 0;
+}
+
+.normaltext2 {
+    text-align: center;
+    font-size: 32px;
+    margin: 10px 40px;
+    flex-shrink: 0;
+}
+
+/* TaskBoard grid - scrollable content area */
+.colm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 64px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    overflow:hidden;
+    margin-bottom: 50px;
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: 0;
+}
+
+.Note {
+    background-image: url("./assets/Images/Note.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    image-rendering: crisp-edges;
+    height: 256px;
+    width: 256px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+/* Alternative approach - if you want the entire Note2 to be scrollable */
+.Note2 {
+    font-family: DrawnFont;
+    color: black;
+    background-image: url("./assets/Images/Note2.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    image-rendering: crisp-edges;
+    height: 80vh; /* Fixed height instead of 1710px */
+    width: 960px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.Bar {
+    font-family: DrawnFont;
+    color: black;
+    background-size: cover;
+    background-repeat: no-repeat;
+    align-items: center;
+    image-rendering: crisp-edges;
+    height: 128px;
+    width: 512px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.Barsm {
+    font-family: DrawnFont;
+    color: black;
+    margin-top: 40px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    align-items: center;
+    image-rendering: crisp-edges;
+    height: 48px;
+    width: 192px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.space {
+    margin: 50px;
+}
+
+.letter-box {
+    border: 4px solid black;
+    padding: 10px;
+    border-radius: 4px;
+    display: inline;
+    font-family: Marker;
+    text-align: justify;
+    text-decoration: underline;
+    margin: 4px;
+    font-size: 48px;
+    flex-shrink: 0;
+}
+
+.letter-box.space {
+    border: none;
+}
+
+textarea {
+    font-family: DrawnFont;
+    border-radius: 8px;
+    margin: 40px;
+    font-size: 32px;
+    height: 40vh;
+    border: 4px solid black;
+    background-color: #F9FF5B;   
+}
+
+.TitleBox {
+    font-family: DrawnFont;
+    text-align: center;
+    font-size: 64px;
+    flex-shrink: 0;
+    margin-top: 70px;
+    margin-bottom: 10px; 
+    border-radius: 8px;
+    margin-left: 50px;
+    margin-right: 50px;
+    font-size: 32px;
+    height: 10vh;
+    border: 4px solid black;
+    background-color: #F9FF5B;   
+}
+
+.usualbutton {
+    font-family: Marker;
+    border-radius: 8px;
+    padding-left: 80px;
+    padding-right: 80px;
+    margin: 20px;
+    font-size: 48px;
+    border: 8px solid #B3C400;
+    border-style: outset;
+    background-color: #F9FF5B;
+}
+
+.usualbutton:hover {
+    padding: 10px;
+    padding-left: 90px;
+    padding-right: 90px;
+    font-size: 52px;
+}
+
+.aligner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropbtn {
+    font-family: Marker;
+    border-radius: 4px;
+    padding-left: 80px;
+    padding-right: 80px;
+    font-size: 48px;
+    border: 6px solid black;
+    background-color: #F9FF5B;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin: 30px auto;
+    width: 400px;
+}
+
+.dropdown-content {
+    font-family: Marker;
+    border-radius: 4px;
+    font-size: 48px;
+    border: 6px solid black;
+    background-color: #F9FF5B;
+    cursor: pointer;  
+    display: none;
+    text-align: justify;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.dropdown-content a:hover {
+    background-color: #B3C400
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.Dater {
+    font-family: Marker;
+    margin-top: 40px;
+    margin-bottom: 70px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border-radius: 4px;
+    font-size: 48px;
+    border: 6px solid black;
+    background-color: #F9FF5B;  
+    text-align: center;    
+}
