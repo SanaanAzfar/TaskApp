@@ -11,7 +11,7 @@ function App() {
           <Route path="/" element={<TaskBoard />} />
           <Route path="/task/:taskId" element={<TaskDetailWrapper />} />
           <Route path="/task/:taskId/edit" element={<TaskFormWrapper />} />
-          <Route path="/create" element={<TaskFormWrapper />} />
+          <Route path="/task/new" element={<TaskFormWrapper />} /> {/* Changed from /create to /task/new */}
         </Routes>
       </div>
     </Router>

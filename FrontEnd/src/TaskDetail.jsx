@@ -39,15 +39,17 @@ export default function TaskDetail({ taskId, onHomeClick, onEditClick }) {
   };
 
   const getStatusImage = (status) => {
-    switch (status) {
+    // Handle both array and string status values
+    const statusValue = Array.isArray(status) ? status[0] : status;
+    switch (statusValue) {
       case "Pending":
-        return "./assets/Images/Pending.png";
+        return "/Images/Pending.png"; // Note the leading slash
       case "In Progress":
-        return "./assets/Images/InProgress.png";
+        return "/Images/InProgress.png";
       case "Completed":
-        return "./assets/Images/Completed.png";
+        return "/Images/Completed.png";
       default:
-        return "./assets/Images/InProgress.png";
+        return "/Images/InProgress.png";
     }
   };
 
@@ -57,6 +59,25 @@ export default function TaskDetail({ taskId, onHomeClick, onEditClick }) {
 
   const handleEditClick = () => {
     if (onEditClick) onEditClick(taskId);
+  };
+
+  const handleDeleteClick = async () => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this task?");
+    if (!isConfirmed) return;
+    
+    try {
+      const response = await fetch(`http://localhost:5000/tasks/${taskId}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        if (onHomeClick) onHomeClick();
+      } else {
+        console.error('Failed to delete task');
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
 
   if (loading) {
@@ -88,8 +109,16 @@ export default function TaskDetail({ taskId, onHomeClick, onEditClick }) {
           <p className="normaltext">{task.Description}</p>
           <div className="space"></div>
           <h3>Status:</h3>
-          <img src={getStatusImage(task.Status)} className="Bar" alt={task.Status}/>
-          <h4>{task.Status}</h4>
+          <img 
+            src={getStatusImage(task.Status)} 
+            className="Bar" 
+            alt={task.Status}
+            onError={(e) => {
+              e.target.onerror = null; 
+              e.target.src = "/Images/InProgress.png";
+            }}
+          />
+          <h4>{Array.isArray(task.Status) ? task.Status[0] : task.Status}</h4>
           <div className="space"></div>
           <h3>Due Date:</h3>
           <div className="space"></div>
@@ -98,6 +127,7 @@ export default function TaskDetail({ taskId, onHomeClick, onEditClick }) {
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
             <button className="usualbutton" onClick={handleHomeClick}>HOME</button>
             <button className="usualbutton" onClick={handleEditClick}>EDIT</button>
+            <button className="usualbutton" onClick={handleDeleteClick}>DELETE</button>
           </div>
         </div>
       </div>

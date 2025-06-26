@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function TaskForm({ taskId, onHomeClick, onSaveComplete }) {
+export default function TaskForm({ taskId, onHomeClick, onSaveComplete, onCancelClick }) {
   const [formData, setFormData] = useState({
     Title: '',
     Description: '',
@@ -90,10 +90,16 @@ export default function TaskForm({ taskId, onHomeClick, onSaveComplete }) {
     if (onHomeClick) onHomeClick();
   };
 
+// Inside your TaskForm component, update the handleCancelClick function:
+const handleCancelClick = () => {
+  if (onCancelClick) {
+    onCancelClick(); // No need to pass taskId here, the wrapper already has it
+  }
+};
   if (loading && isEditMode && !formData.Title) {
     return (
       <div>
-        <h1>Task Form</h1>
+        <h1>{isEditMode ? 'Edit Task' : 'Create Task'}</h1>
         <p>Loading task data...</p>
       </div>
     );
@@ -101,7 +107,7 @@ export default function TaskForm({ taskId, onHomeClick, onSaveComplete }) {
 
   return (
     <div>
-      <h1>Task Form</h1>
+      <h1>{isEditMode ? 'Edit Task' : 'Create New Task'}</h1>
       <div className="colm">
         <div className="Note2">
           <input 
@@ -175,10 +181,17 @@ export default function TaskForm({ taskId, onHomeClick, onSaveComplete }) {
             </button>
             <button 
               className="usualbutton" 
+              onClick={handleCancelClick}
+              disabled={loading}
+            >
+              CANCEL
+            </button>
+            <button 
+              className="usualbutton" 
               onClick={handleSubmit}
               disabled={loading}
             >
-              {loading ? 'SAVING...' : 'DONE'}
+              {loading ? 'SAVING...' : 'SAVE'}
             </button>
           </div>
         </div>

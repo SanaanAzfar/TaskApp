@@ -7,11 +7,17 @@ function TaskFormWrapper() {
   
   return (
     <TaskForm 
-      taskId={taskId} // Will be undefined for /create route
+      taskId={taskId}
       onHomeClick={() => navigate('/')}
-      onSaveComplete={(savedTask) => {
-        // Navigate to task detail after saving
-        navigate(`/task/${savedTask._id}`);
+      onSaveComplete={(savedTask) => navigate(`/task/${savedTask._id}`)}
+      onCancelClick={() => {
+        if (taskId) {
+          // If we're editing (has taskId), go back to task details
+          navigate(`/task/${taskId}`);
+        } else {
+          // If we're creating new, go back to home
+          navigate('/');
+        }
       }}
     />
   );
