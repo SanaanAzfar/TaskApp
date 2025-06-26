@@ -17,6 +17,8 @@ export default function TaskForm({ taskId, onHomeClick, onSaveComplete, onCancel
     if (taskId) {
       setIsEditMode(true);
       fetchTaskData();
+    } else {
+      setIsEditMode(false);
     }
   }, [taskId]);
 
@@ -24,6 +26,7 @@ export default function TaskForm({ taskId, onHomeClick, onSaveComplete, onCancel
     try {
       setLoading(true);
       const response = await fetch(`http://localhost:5000/tasks/${taskId}`);
+      if (!response.ok) throw new Error('Failed to fetch task');
       const data = await response.json();
       setFormData({
         Title: data.Title || '',
@@ -33,11 +36,11 @@ export default function TaskForm({ taskId, onHomeClick, onSaveComplete, onCancel
       });
     } catch (error) {
       console.error('Error fetching task data:', error);
+      // Handle error appropriately
     } finally {
       setLoading(false);
     }
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -54,38 +57,53 @@ export default function TaskForm({ taskId, onHomeClick, onSaveComplete, onCancel
     setDropdownOpen(false);
   };
 
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      
-      const url = isEditMode 
-        ? `http://localhost:5000/tasks/${taskId}`
-        : 'http://localhost:5000/tasks';
-      
-      const method = isEditMode ? 'PUT' : 'POST';
-      
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
+const handleSubmit = async () => {
+  try {
+    setLoading(true);
+    
+    const url = isEditMode 
+      ? `http://localhost:5000/tasks/${taskId}`
+      : 'http://localhost:5000/tasks';
+    
+    const method = isEditMode ? 'PUT' : 'POST';
+    
+    const response = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
 
-      if (response.ok) {
-        const savedTask = await response.json();
-        console.log('Task saved successfully:', savedTask);
-        if (onSaveComplete) onSaveComplete(savedTask);
-      } else {
-        console.error('Error saving task:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error saving task:', error);
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Save failed');
     }
-  };
 
+    const savedTask = await response.json();
+    console.log('Full response:', savedTask); // Debug log
+
+    // FIRST try _id, then id, then check response status
+    const newTaskId = savedTask._id || savedTask.id;
+    
+    if (!newTaskId) {
+      // If we're editing, use the original taskId as fallback
+      if (isEditMode && taskId) {
+        console.warn('Using original taskId as fallback');
+        if (onSaveComplete) onSaveComplete(taskId);
+        return;
+      }
+      throw new Error('Server did not return task ID');
+    }
+
+    if (onSaveComplete) {
+      onSaveComplete(newTaskId);
+    }
+  } catch (error) {
+    console.error('Save error:', error);
+    alert(`Save failed: ${error.message}`);
+  } finally {
+    setLoading(false);
+  }
+};
   const handleHomeClick = () => {
     if (onHomeClick) onHomeClick();
   };
@@ -171,7 +189,7 @@ const handleCancelClick = () => {
             onChange={handleInputChange}
           />
           
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
+          <div className="button-container">
             <button 
               className="usualbutton" 
               onClick={handleHomeClick}

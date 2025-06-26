@@ -153,19 +153,23 @@ const getStatusImage = (status) => {
                 {Array.isArray(filteredTasks) && filteredTasks.length > 0 ? (
                     filteredTasks.map((task) => (
                         <div
-                            key={task._id}
-                            className="Note"
-                            onClick={() => handleTaskClick(task._id)}
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <h5>{task.Title}</h5>
-                            <div className="aligner">
-                                <img src={getStatusImage(task.Status)} className="Barsm" alt={task.Status}/>
-                            </div>
-                            <p className="normaltext2">
-                                {Array.isArray(task.Status) ? task.Status[0] : task.Status}
-                            </p>
-                        </div>
+    key={task._id}
+    className="Note"
+    onClick={() => handleTaskClick(task._id)}
+    style={{ cursor: 'pointer' }}
+>
+    <h5 style={{ marginBottom: '5px' }}>{task.Title}</h5>
+    <div className="aligner" style={{ margin: '3px 0' }}>
+        <img 
+            src={getStatusImage(task.Status)} 
+            className="Barsm" 
+            alt={task.Status}
+        />
+    </div>
+    <p className="normaltext2" style={{ marginTop: '3px' }}>
+        {Array.isArray(task.Status) ? task.Status[0] : task.Status}
+    </p>
+</div>
                     ))
                 ) : (
                     <div className="aligner">

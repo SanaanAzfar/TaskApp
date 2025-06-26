@@ -1,3 +1,4 @@
+/* Base styles */
 @font-face {
     font-family: DrawnFont;
     src: url("./assets/Fonts/StickyNotes.ttf") format('truetype');
@@ -27,7 +28,6 @@ body {
     background-attachment: fixed;
 }
 
-/* Style the React root container */
 #root {
     height: 100vh;
     width: 100vw;
@@ -35,7 +35,6 @@ body {
     flex-direction: column;
 }
 
-/* Style your main component container */
 #root > div {
     margin: 0;
     padding: 0;
@@ -46,6 +45,7 @@ body {
     font-family: DrawnFont;
 }
 
+/* Typography */
 h1 {
     font-family: Marker;
     text-align: center;
@@ -54,7 +54,6 @@ h1 {
     margin-top: 40px;
     margin-bottom: 10px;
     flex-shrink: 0;
-    /* Keep TaskBoard header fixed at top */
     position: static;
     top: 0;
     z-index: 100;
@@ -93,11 +92,12 @@ h5 {
     font-family: Marker;
     text-align: center;
     text-decoration: underline;
-    margin: 0 30px;
-    margin-top: 20px;
-    margin-bottom: 0;
+    margin: 0 15px;
+    margin-top: 15px;
+    margin-bottom: 5px;
     font-size: 32px;
     flex-shrink: 0;
+    line-height: 1.2;
 }
 
 .normaltext {
@@ -109,11 +109,11 @@ h5 {
 .normaltext2 {
     text-align: center;
     font-size: 32px;
-    margin: 10px 40px;
+    margin: 5px 15px;
     flex-shrink: 0;
 }
 
-/* TaskBoard grid - scrollable content area */
+/* Layout Components */
 .colm {
     display: flex;
     flex-wrap: wrap;
@@ -123,7 +123,7 @@ h5 {
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: auto;
-    overflow:hidden;
+    overflow: hidden;
     margin-bottom: 50px;
     padding: 20px;
     box-sizing: border-box;
@@ -139,9 +139,13 @@ h5 {
     width: 256px;
     flex-shrink: 0;
     flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 15px;
+    box-sizing: border-box;
 }
 
-/* Alternative approach - if you want the entire Note2 to be scrollable */
 .Note2 {
     font-family: DrawnFont;
     color: black;
@@ -149,7 +153,7 @@ h5 {
     background-size: cover;
     background-repeat: no-repeat;
     image-rendering: crisp-edges;
-    height: 80vh; /* Fixed height instead of 1710px */
+    height: 80vh;
     width: 960px;
     flex-shrink: 0;
     flex-grow: 0;
@@ -177,7 +181,7 @@ h5 {
 .Barsm {
     font-family: DrawnFont;
     color: black;
-    margin-top: 40px;
+    margin-top: 5px;
     background-size: cover;
     background-repeat: no-repeat;
     align-items: center;
@@ -192,23 +196,48 @@ h5 {
     margin: 50px;
 }
 
-.letter-box {
-    border: 4px solid black;
-    padding: 10px;
+/* Due Date Styling - Fixed */
+.due-date-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.due-date-letters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    max-width: 90%;
+}
+
+.due-date-letter {
+    border: 3px solid black;
+    padding: 6px 8px;
     border-radius: 4px;
-    display: inline;
     font-family: Marker;
-    text-align: justify;
+    font-size: 36px;
+    line-height: 1;
+    min-width: 36px;
+    text-align: center;
     text-decoration: underline;
-    margin: 4px;
-    font-size: 48px;
-    flex-shrink: 0;
+    background-color: #F9FF5B;
 }
 
-.letter-box.space {
+.due-date-space {
     border: none;
+    background-color: transparent;
+    min-width: 20px;
 }
 
+.due-date-missing {
+    font-family: Marker;
+    font-size: 36px;
+    color: #666;
+}
+
+/* Form Elements */
 textarea {
     font-family: DrawnFont;
     border-radius: 8px;
@@ -222,10 +251,8 @@ textarea {
 .TitleBox {
     font-family: DrawnFont;
     text-align: center;
-    font-size: 64px;
-    flex-shrink: 0;
     margin-top: 70px;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
     border-radius: 8px;
     margin-left: 50px;
     margin-right: 50px;
@@ -235,24 +262,34 @@ textarea {
     background-color: #F9FF5B;   
 }
 
+/* Buttons & Interactive Elements */
 .usualbutton {
     font-family: Marker;
     border-radius: 8px;
-    padding: 10px 60px; /* Use shorthand: top/bottom left/right */
+    padding: 10px 60px;
     margin: 20px;
     font-size: 32px;
     border: 8px solid #B3C400;
     border-style: outset;
     background-color: #F9FF5B;
-    cursor: pointer; /* Add cursor pointer for better UX */
-    transition: all 0.2s ease; /* Smooth transition */
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .usualbutton:hover {
-    padding: 10px 70px; /* Keep consistent padding format */
+    padding: 10px 70px;
     font-size: 36px;
-    transform: scale(1.02); /* Optional: slight scale for better effect */
+    transform: scale(1.02);
 }
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
 .aligner {
     display: flex;
     flex-direction: column;
@@ -263,8 +300,7 @@ textarea {
 .dropbtn {
     font-family: Marker;
     border-radius: 4px;
-    padding-left: 80px;
-    padding-right: 80px;
+    padding: 10px 80px;
     width: 400px;
     font-size: 32px;
     border: 6px solid black;
@@ -300,7 +336,7 @@ textarea {
 }
 
 .dropdown-content a:hover {
-    background-color: #B3C400
+    background-color: #B3C400;
 }
 
 .dropdown:hover .dropdown-content {
@@ -309,13 +345,260 @@ textarea {
 
 .Dater {
     font-family: Marker;
-    margin-top: 40px;
-    margin-bottom: 70px;
-    margin-left: 50px;
-    margin-right: 50px;
+    margin: 40px 50px 70px;
     border-radius: 4px;
     font-size: 48px;
     border: 6px solid black;
     background-color: #F9FF5B;  
     text-align: center;    
+}
+
+/* Tablet Styles (768px - 1024px) */
+@media screen and (max-width: 1024px) {
+    h1 {
+        font-size: 60px;
+        margin-top: 30px;
+    }
+    
+    h2, h3, h4 {
+        font-size: 42px;
+    }
+    
+    h5 {
+        font-size: 28px;
+        margin: 0 10px;
+        margin-top: 15px;
+        margin-bottom: 3px;
+    }
+    
+    .normaltext, .normaltext2 {
+        font-size: 28px;
+    }
+    
+    .colm {
+        gap: 40px;
+        padding: 15px;
+    }
+    
+    .Note {
+        height: 220px;
+        width: 220px;
+        padding-bottom: 10px;
+    }
+    
+    .Barsm {
+        width: 120px;
+        height: 30px;
+        margin-top: 3px;
+    }
+    
+    .Note2 {
+        width: 90vw;
+        height: 70vh;
+    }
+    
+    .Bar {
+        width: 400px;
+        height: 100px;
+    }
+    
+    .usualbutton, .dropbtn {
+        font-size: 28px;
+        padding: 8px 50px;
+    }
+    
+    .dropdown, .dropbtn {
+        width: 350px;
+    }
+    
+    .Dater {
+        font-size: 36px;
+    }
+    
+    .due-date-letter {
+        font-size: 32px;
+        padding: 5px 7px;
+        min-width: 32px;
+    }
+    
+    .normaltext2 {
+        margin: 3px 10px;
+        font-size: 24px;
+    }
+}
+
+/* Mobile Styles (up to 767px) */
+@media screen and (max-width: 767px) {
+    h1 {
+        font-size: 48px;
+        margin-top: 20px;
+    }
+    
+    h2, h3 {
+        font-size: 36px;
+        margin-top: 20px;
+    }
+    
+    h5 {
+        font-size: 24px;
+        margin: 0 8px;
+        margin-top: 12px;
+        margin-bottom: 2px;
+    }
+    
+    .normaltext, .normaltext2 {
+        font-size: 24px;
+        margin: 8px 20px;
+    }
+    
+    .colm {
+        gap: 20px;
+        padding: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .Note {
+        height: 180px;
+        width: 180px;
+        padding-bottom: 8px;
+    }
+    
+    .Note2 {
+        width: 95vw;
+        height: 65vh;
+    }
+    
+    .Bar {
+        width: 300px;
+        height: 80px;
+    }
+    
+    .Barsm {
+        width: 90px;
+        height: 24px;
+        margin-top: 2px;
+    }
+    
+    .button-container {
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .usualbutton {
+        margin: 10px;
+        padding: 8px 20px;
+        font-size: 24px;
+    }
+    
+    .dropbtn {
+        font-size: 24px;
+        padding: 6px 30px;
+        margin: 15px;
+    }
+    
+    .dropdown, .dropbtn {
+        width: 280px;
+    }
+    
+    .Dater {
+        font-size: 28px;
+        margin: 20px 30px 50px;
+    }
+    
+    textarea {
+        margin: 20px;
+        font-size: 24px;
+        height: 35vh;
+    }
+    
+    .TitleBox {
+        margin: 20px 30px;
+        margin-top: 50px;
+        font-size: 24px;
+        height: 8vh;
+    }
+    
+    .due-date-letter {
+        font-size: 28px;
+        padding: 4px;
+        min-width: 28px;
+    }
+    
+    h4 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .due-date-wrapper {
+        margin: 5px 0;
+    }
+    
+    .space {
+        margin: 30px;
+    }
+    
+    .normaltext2 {
+        margin: 2px 8px;
+        font-size: 20px;
+    }
+}
+
+/* Small Mobile Devices (up to 480px) */
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 36px;
+    }
+    
+    h2, h3, h4 {
+        font-size: 28px;
+    }
+    
+    .Note {
+        height: 150px;
+        width: 150px;
+        padding-bottom: 5px;
+    }
+    
+    h5 {
+        font-size: 20px;
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+    
+    .Bar {
+        width: 250px;
+    }
+    
+    .Barsm {
+        width: 70px;
+        height: 20px;
+    }
+    
+    .usualbutton, .dropbtn {
+        font-size: 20px;
+        padding: 5px 20px;
+    }
+    
+    .dropdown, .dropbtn {
+        width: 240px;
+    }
+    
+    .Dater {
+        font-size: 24px;
+    }
+    
+    .due-date-letter {
+        font-size: 24px;
+        padding: 3px 5px;
+        min-width: 24px;
+    }
+    
+    .due-date-letters {
+        gap: 1px;
+    }
+    
+    .normaltext2 {
+        font-size: 18px;
+        margin: 1px 5px;
+    }
 }

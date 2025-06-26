@@ -9,13 +9,11 @@ function TaskFormWrapper() {
     <TaskForm 
       taskId={taskId}
       onHomeClick={() => navigate('/')}
-      onSaveComplete={(savedTask) => navigate(`/task/${savedTask._id}`)}
+      onSaveComplete={(taskId) => navigate(`/task/${taskId}`)}  // Changed this line
       onCancelClick={() => {
         if (taskId) {
-          // If we're editing (has taskId), go back to task details
           navigate(`/task/${taskId}`);
         } else {
-          // If we're creating new, go back to home
           navigate('/');
         }
       }}
