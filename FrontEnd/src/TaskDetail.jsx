@@ -4,13 +4,14 @@ export default function TaskDetail({ taskId, onHomeClick, onEditClick }) {
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_API_PORT || 5000}`;
 
   useEffect(() => {
     const fetchTask = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`http://localhost:5000/tasks/${taskId}`);
+        const response = await fetch(`${apiUrl}/tasks/${taskId}`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -46,7 +47,7 @@ export default function TaskDetail({ taskId, onHomeClick, onEditClick }) {
     if (!window.confirm("Are you sure you want to delete this task?")) return;
     
     try {
-      const response = await fetch(`http://localhost:5000/tasks/${taskId}`, {
+      const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
         method: 'DELETE'
       });
       
