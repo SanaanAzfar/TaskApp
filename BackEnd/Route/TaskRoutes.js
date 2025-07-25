@@ -31,7 +31,7 @@ router.delete('/:id', DeleteTask);   // Handles DELETE /api/tasks/:id
 // Task sharing routes (paths are relative to /api/tasks)
 router.get('/:id/shared', getSharedTask); // Handles GET /api/tasks/:id/shared
 
-router.get('/:id/user', getTasksById);    // Handles GET /api/tasks/:id/user
+router.get('/:userId/tasks', getTasksById);
 
 router.patch('/:id/share', ShareTask);    // Handles PATCH /api/tasks/:id/share
 
