@@ -10,7 +10,9 @@ import {
     getTasksById,
     getSharedTask,
     ShareTask,
-    UnShareTask
+    UnShareTask,
+     getAnalyticsOverview, // <-- Import new controller function
+    getAnalyticsTrends   // <-- Import new controller function
 } from '../Controllers/TaskController.js'; 
 
 const router = express.Router();
@@ -34,6 +36,9 @@ router.get('/:id/shared', getSharedTask); // Handles GET /api/tasks/:id/shared
 router.get('/:userId/tasks', getTasksById);
 
 router.patch('/:id/share', ShareTask);    // Handles PATCH /api/tasks/:id/share
+
+router.get('/analytics/overview', getAnalyticsOverview);
+router.get('/analytics/trends', getAnalyticsTrends);
 
 router.patch('/:id/unshare', UnShareTask); // Handles PATCH /api/tasks/:id/unshare
 

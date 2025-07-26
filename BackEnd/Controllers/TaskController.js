@@ -270,3 +270,140 @@ export const DeleteTask = async (req, res) => {
         res.status(500).send({ message: "Server error", error: error.message });
     }
 };
+
+// Inside backend/Controllers/TaskController.js -> getAnalyticsOverview function
+export const getAnalyticsOverview = async (req, res) => {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      return res.status(400).json({ message: "UserId Not Found" });
+    }
+
+    const overview = await Task.aggregate([
+      {
+        $match: {
+          $or: [
+            { Owner: userId },
+            { Shared: userId }
+          ]
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalTasks: { $sum: 1 },
+          // --- FIX: Use $in to check if status string is in the Status array ---
+          completedTasks: {
+            $sum: {
+              $cond: [{ $in: ["Completed", "$Status"] }, 1, 0] // <-- CHANGED
+            }
+          },
+          pendingTasks: {
+            $sum: {
+              $cond: [{ $in: ["Pending", "$Status"] }, 1, 0] // <-- CHANGED
+            }
+          },
+          inProgressTasks: {
+            $sum: {
+              $cond: [{ $in: ["In Progress", "$Status"] }, 1, 0] // <-- CHANGED
+            }
+          }
+          // ---
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalTasks: 1,
+          completedTasks: 1,
+          pendingTasks: 1,
+          inProgressTasks: 1
+        }
+      }
+    ]);
+
+    const result = overview.length > 0 ? overview[0] : {
+      totalTasks: 0,
+      completedTasks: 0,
+      pendingTasks: 0,
+      inProgressTasks: 0
+    };
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error fetching analytics overview (server-side):', error);
+    res.status(500).json({ message: "Internal server error while fetching analytics overview", error: error.message });
+  }
+};
+
+// Inside backend/Controllers/TaskController.js -> getAnalyticsTrends function
+
+// Inside backend/Controllers/TaskController.js -> getAnalyticsTrends function
+export const getAnalyticsTrends = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      return res.status(400).json({ message: "UserId Not Found" });
+    }
+
+    // --- ADD DETAILED DEBUGGING ---
+    console.log(`DEBUG Trends: Request received for user ID: ${userId}`);
+
+    // 1. Log the calculated date
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    console.log("DEBUG Trends: Calculating trends from", sevenDaysAgo.toISOString());
+
+    // 2. BEFORE Aggregation: Fetch a couple of raw tasks for this user to inspect structure
+    // This helps verify userId matching and the existence/type of createdAt
+    const sampleTasks = await Task.find({
+       $or: [
+         { Owner: userId },
+         { Shared: userId }
+       ]
+    }).select('Title Owner Shared createdAt').limit(2); // Limit output
+    console.log("DEBUG Trends: Sample raw tasks found for user:", JSON.stringify(sampleTasks, null, 2)); // Pretty print
+
+    // --- END ADD DETAILED DEBUGGING ---
+
+    // --- Use MongoDB Aggregation for trend calculation ---
+    const trends = await Task.aggregate([
+      {
+        $match: {
+          $and: [
+            {
+              $or: [
+                { Owner: userId },
+                { Shared: userId }
+              ]
+            },
+            { createdAt: { $gte: sevenDaysAgo } }
+          ]
+        }
+      },
+      {
+        $project: {
+          day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          Status: 1
+        }
+      },
+      {
+        $group: {
+          _id: "$day",
+          count: { $sum: 1 },
+        }
+      },
+      {
+        $sort: { _id: 1 }
+      }
+    ]);
+
+    console.log("DEBUG Trends: Final aggregation result", trends);
+
+    res.status(200).json(trends);
+  } catch (error) {
+    console.error('Error fetching analytics trends (server-side):', error);
+    res.status(500).json({ message: "Internal server error while fetching analytics trends", error: error.message });
+  }
+};
