@@ -1,5 +1,27 @@
+// src/TaskBoard.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+// --- Helper function to get User ID from JWT token ---
+const getUserIdFromToken = (token) => {
+  if (!token) return null;
+  try {
+    // JWT has 3 parts separated by dots. The payload is the middle part.
+    const base64Url = token.split('.')[1];
+    // Fix potential base64 padding issues
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    const decoded = JSON.parse(jsonPayload);
+    // Adjust 'id' based on what your JWT payload actually uses (could be 'userId', '_id', etc.)
+    return decoded.id || decoded.userId || decoded._id || null;
+  } catch (error) {
+    console.error("Error decoding token to get user ID:", error);
+    return null;
+  }
+};
+// --- End Helper Function ---
 
 export default function TaskBoard() {
     const navigate = useNavigate();
@@ -8,6 +30,8 @@ export default function TaskBoard() {
     const [statusFilter, setStatusFilter] = useState("All");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    // State to potentially store user ID if needed elsewhere, or just use helper
+    // const [currentUserId, setCurrentUserId] = useState(null);
 
     const statusOptions = ['All', 'Pending', 'In Progress', 'Completed'];
 
@@ -15,6 +39,11 @@ export default function TaskBoard() {
     useEffect(() => {
         const token = localStorage.getItem('token');
         setIsLoggedIn(!!token);
+        // Optional: Set user ID in state if needed elsewhere
+        // if (token) {
+        //   const userId = getUserIdFromToken(token);
+        //   setCurrentUserId(userId);
+        // }
     }, []);
 
     // Fetch tasks with JWT token
@@ -27,13 +56,23 @@ export default function TaskBoard() {
                     return;
                 }
 
+                // --- Get User ID from token ---
+                const userId = getUserIdFromToken(token);
+                if (!userId) {
+                     console.error("Could not retrieve user ID from token");
+                     throw new Error("User ID not found in token");
+                }
+                // --- End Get User ID ---
+
                 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-                const response = await fetch(`${apiUrl}/api/tasks`, {
+                // --- FIX: Update URL to use user ID from token ---
+                const response = await fetch(`${apiUrl}/api/tasks/${userId}/tasks`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
+                // --- END FIX ---
 
                 if (response.status === 401) {
                     localStorage.removeItem('token');
@@ -47,23 +86,26 @@ export default function TaskBoard() {
                 setTasks(Array.isArray(data) ? data : []);
             } catch (error) {
                 console.error('Fetch error:', error);
+                // Optionally set an error state to display to user
                 setTasks([]);
             } finally {
-                setLoading(false); // Always stop loading
+                setLoading(false);
             }
         };
 
         fetchTasks();
-    }, [navigate]);
+    }, [navigate]); // Consider if userId should be a dependency
 
     // Handle logout
     const handleLogout = () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('userId');
+        localStorage.removeItem('userId'); // Remove if you store it elsewhere
         setIsLoggedIn(false);
+        // setCurrentUserId(null); // Reset user ID state if used
         navigate('/login');
     };
 
+    // --- Rest of the component (filtering, rendering, etc.) remains largely the same ---
     // Filter tasks by status
     const filteredTasks = tasks.filter(task => {
         const taskStatus = Array.isArray(task.Status) ? task.Status[0] : task.Status;
@@ -102,6 +144,8 @@ export default function TaskBoard() {
         );
     }
 
+    // ... rest of the return statement (JSX) is unchanged ...
+    // (It's the same as your provided code, just the fetch logic above was updated)
     return (
         <div>
             {/* Header with Login/Dashboard buttons */}
@@ -112,7 +156,7 @@ export default function TaskBoard() {
                 marginBottom: '20px'
             }}>
                 {/* Left side: Dashboard button */}
-                <div style={{ flex: 1, textAlign: 'left' }}> {/* Flex 1 to allow stretching for h1 */}
+                <div style={{ flex: 1, textAlign: 'left' }}>
                     {isLoggedIn && (
                         <button
                             className="usualbutton"
@@ -124,12 +168,12 @@ export default function TaskBoard() {
                 </div>
 
                 {/* Center: Task Board Title */}
-                <h1 style={{ flex: 2, textAlign: 'center', margin: 0 }}> {/* Flex 2 to make it take more space */}
+                <h1 style={{ flex: 2, textAlign: 'center', margin: 0 }}>
                     Task Board
                 </h1>
 
                 {/* Right side: Logout/Login button */}
-                <div style={{ flex: 1, textAlign: 'right' }}> {/* Flex 1 to allow stretching for h1 */}
+                <div style={{ flex: 1, textAlign: 'right' }}>
                     {isLoggedIn ? (
                         <button
                             className="usualbutton"

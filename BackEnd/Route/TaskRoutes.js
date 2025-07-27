@@ -12,7 +12,8 @@ import {
     ShareTask,
     UnShareTask,
      getAnalyticsOverview, // <-- Import new controller function
-    getAnalyticsTrends   // <-- Import new controller function
+    getAnalyticsTrends,   // <-- Import new controller function
+      getUserNotifications
 } from '../Controllers/TaskController.js'; 
 
 const router = express.Router();
@@ -41,5 +42,7 @@ router.get('/analytics/overview', getAnalyticsOverview);
 router.get('/analytics/trends', getAnalyticsTrends);
 
 router.patch('/:id/unshare', UnShareTask); // Handles PATCH /api/tasks/:id/unshare
+
+router.get('/notifications', getUserNotifications);
 
 export default router;
