@@ -1,0 +1,27 @@
+# my-project-root/nixpacks.toml
+
+# Specify the build environment (Node.js)
+[phases.setup]
+nixPkgs = ['nodejs', 'npm'] # Or 'yarn' if you use Yarn
+
+# --- PHASE 1: Install Dependencies for Both Parts ---
+[phases.install]
+# Run npm install in both directories
+cmds = [
+  'cd BackEnd && npm install',
+  'cd FrontEnd && npm install'
+]
+
+# --- PHASE 2: Build Applications ---
+[phases.build]
+# Run build scripts in both directories
+cmds = [
+  'cd BackEnd && npm run build', # If your backend needs a build step (e.g., TypeScript)
+  'cd FrontEnd && npm run build'  # This is the standard Vite build command
+]
+
+# --- DEFINE START COMMAND ---
+[start]
+# This command will be used to run your application when the container starts.
+# We'll create a simple script to run both the backend server and serve the frontend.
+cmd = 'sh ./start.sh'
