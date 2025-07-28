@@ -8,18 +8,23 @@ set -e
 # Ensures background processes are terminated when the script exits (e.g., Ctrl+C)
 cleanup() {
     echo "Stopping backend server..."
-    kill $BACKEND_PID
-    wait $BACKEND_PID 2>/dev/null || true # Wait for process to finish, suppress errors if already dead
+    # Check if BACKEND_PID is set and not empty before killing
+    if [[ -n "$BACKEND_PID" ]]; then
+        kill $BACKEND_PID
+        wait $BACKEND_PID 2>/dev/null || true # Wait for process to finish, suppress errors if already dead
+    fi
     echo "Backend server stopped."
     exit 0
 }
-trap cleanup SIGINT SIGTERM # Trap Ctrl+C (SIGINT) and termination signals (SIGTERM)
+# --- FIX: Use numeric signal values for better compatibility ---
+trap cleanup 2 15 # Trap Ctrl+C (SIGINT=2) and termination signals (SIGTERM=15)
+# --- END FIX ---
 
 # --- START BACKEND SERVER ---
 echo "Starting backend server..."
 cd BackEnd
 # Use PORT environment variable if set, otherwise default to 3000 (adjust as needed)
-PORT=${PORT:-3000}
+PORT=${PORT:-5000}
 # Start the backend server in the background (&) and capture its PID
 node index.js &
 BACKEND_PID=$!
@@ -43,3 +48,4 @@ echo "Frontend server started with PID $FRONTEND_PID"
 # Wait indefinitely for the background processes.
 # The trap will handle cleanup on Ctrl+C or termination.
 wait $BACKEND_PID $FRONTEND_PID
+

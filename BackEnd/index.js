@@ -102,7 +102,7 @@ mongoose.connect(dbURI, {})
   .then(() => {
     console.log("MongoDB connection successful");
     // --- Start server using the HTTP server instance ---
-    server.listen(port, () => { // Use 'server' instead of 'app'
+    server.listen(port, '0.0.0.0', () => { // Use 'server' instead of 'app'
       console.log(`Server is running on port ${port}`);
     });
     // --- END Start server ---

@@ -1,0 +1,13 @@
+# .dockerignore (Place in project root)
+node_modules
+FrontEnd/node_modules
+BackEnd/node_modules
+FrontEnd/dist
+BackEnd/dist
+.git
+.gitignore
+README.md
+*.md
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
